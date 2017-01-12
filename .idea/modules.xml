@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ivy_pipy.iml" filepath="$PROJECT_DIR$/.idea/modules/ivy_pipy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ivy_pipy_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ivy_pipy_main.iml" group="ivy_pipy" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ivy_pipy_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ivy_pipy_test.iml" group="ivy_pipy" />
+    </modules>
+  </component>
+</project>
