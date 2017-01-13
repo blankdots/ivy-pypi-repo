@@ -19,7 +19,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN wget -P /var/lib  https://dl.bintray.com/linkedin/maven/com/linkedin/pygradle/pivy-importer/${version}/pivy-importer-${version}-all.jar
 
-RUN wget -P /var http://github.com/blankdots/ivy-pypi/releases/download/v${plugin}/ivy_pipy-${plugin}.tar \
+RUN wget -P /var http://github.com/blankdots/ivy-pypi-repo/releases/download/v${plugin}/ivy_pipy-${plugin}.tar \
     && tar -xf /var/ivy_pipy-${plugin}.tar -C /var
 
 COPY web /data/web
