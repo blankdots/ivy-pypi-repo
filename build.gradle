@@ -6,7 +6,7 @@ plugins {
 }
 
 version = '0.1'
-mainClassName = "App"
+mainClassName = 'org.uh.attx.de.pypi.App'
 
 repositories {
     mavenCentral()

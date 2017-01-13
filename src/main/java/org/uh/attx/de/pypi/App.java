@@ -16,16 +16,6 @@ public class App {
 
         port(5639);
 
-        post("/init", "application/json", (request, response) -> {
-            String result = String.format("{ \n" +
-                    "\t\"addedDependencies\": %s, \n" +
-                    "\t\"addedReplace\": %s, \n" +
-                    "\t\"commandLine\": \"%s\" \n" +
-                    "}", dependencies, replace, commandLine);
-            response.status(201); // 201 Created
-            return result;
-        });
-
         post("/add", "application/json", (request, response) -> {
             String content = request.body();
 
@@ -54,7 +44,7 @@ public class App {
                         packageString += name + ":" + version + " ";
                     }
 
-                    commandLine = String.format("java -jar /data/lib/pivy-importer-%s-all.jar --repo %s %s", artifactVersion, REPO, packageString);
+                    commandLine = String.format("java -jar /var/lib/pivy-importer-%s-all.jar --repo %s %s", artifactVersion, REPO, packageString);
 
                     if (replace != null) {
                         Iterator j = replace.iterator();
@@ -67,7 +57,7 @@ public class App {
                             replaceString += name + ":" + oldVersion + "=" + name + ":" + newVersion + " ";
                         }
 
-                        commandLine = String.format("java -jar /data/lib/pivy-importer-%s-all.jar --repo %s %s--replace %s", artifactVersion, REPO, packageString, replaceString);
+                        commandLine = String.format("java -jar /var/lib/pivy-importer-%s-all.jar --repo %s %s--replace %s", artifactVersion, REPO, packageString, replaceString);
 
                     }
 
