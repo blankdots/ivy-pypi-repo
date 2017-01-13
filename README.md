@@ -1,15 +1,16 @@
-## PypiRepo for Python Gradle builds
+## PypiRepo for PyGradle - Python Gradle builds
 
-Aim is to simplify work with PyGrale https://github.com/linkedin/pygradle by providing a self-hosted repository for dependencies.
+Aim is to simplify work with PyGradle https://github.com/linkedin/pygradle by providing a self-hosted repository for dependencies.
 
 The Docker image provides:
 * Nginx container to serve repository files;
 * API to initialize repository with a given set of dependencies - TO DO;
 * API to add new dependencies;
+* API developed using http://sparkjava.com/
 
 The Gradle build provides tasks:
 * gradle wrapper for Gradle 3.3 provided
-* build your own artifact for the API;
+* build your own artifact for the API; 
 * build docker image based on [gradle-dcompose-plugin](https://github.com/chrisgahlert/gradle-dcompose-plugin).
 
 ## Build and Run
