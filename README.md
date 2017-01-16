@@ -52,14 +52,14 @@ The following endpoints are available:
 * `http://localhost:5639/add`- for adding depenencies
 
 Structure of the POST body for `http://localhost:5639/add`:
-```
+```{json}
 {
 	"dependencies":  [
 		{
 			"name" : "dependency",
 			"version" : "1.0.0"
 		},
-		...
+		{}
 	],
 	"replace" : [
 		{
@@ -67,7 +67,7 @@ Structure of the POST body for `http://localhost:5639/add`:
 			"oldVersion": "0.1",
 			"newVersion": "0.1.1"
 		},
-    ....
+		{}
 	]
 }
 ```
