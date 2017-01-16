@@ -10,7 +10,7 @@ The Docker image provides:
 
 The Gradle build provides tasks:
 * gradle wrapper for Gradle 3.3 provided
-* build your own artifact for the API; 
+* build your own artifact for the API;
 * build docker image based on [gradle-dcompose-plugin](https://github.com/chrisgahlert/gradle-dcompose-plugin).
 
 ## Build and Run
@@ -26,6 +26,24 @@ Other commands:
 Running the docker image:
 * without persistance: `docker run -p 5039:5039 -p 5639:5639 -d imageName`
 * with persistance: `docker run -p 5039:5039 -p 5639:5639 -d -v /data:/data imageName`
+
+### PyGradle usage
+
+In order to use this Ivy repository with PyGradle one can set it up in the `build.grale` as:
+
+``` {groovy}
+repositories {
+    // the webrepository
+    ivy{
+      name 'pypi-repo'
+  		url "http://pypirepo:5039/"
+  		layout 'pattern' , {
+  			artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
+  			ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'
+  		}
+    }
+}
+```
 
 ## Endpoints
 
