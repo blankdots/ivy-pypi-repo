@@ -1,0 +1,153 @@
+{
+  "dependencies":  [
+    {
+      "name" : "Flask",
+      "version" : "0.11.1"
+    },
+    {
+      "name" : "pathlib",
+      "version" : "1.0.1"
+    },
+    {
+      "name" : "connexion",
+      "version" : "1.0.129"
+    },
+    {
+      "name" : "lxml",
+      "version" : "3.6.4"
+    },
+    {
+      "name" : "beautifulsoup4",
+      "version" : "4.5.1"
+    },
+    {
+      "name" : "rdflib",
+      "version" : "4.2.1"
+    },
+    {
+      "name" : "rdflib-jsonld",
+      "version" : "0.4.0"
+    },
+    {
+      "name" : "PyMySQL",
+      "version" : "0.7.9"
+    },
+    {
+      "name" : "gunicorn",
+      "version" : "19.6.0"
+    },
+    {
+      "name" : "pep8",
+      "version" : "1.7.0"
+    },
+    {
+      "name" : "pyflakes",
+      "version" : "1.3.0"
+    },
+    {
+      "name" : "click",
+      "version" : "6.6"
+    },
+    {
+      "name" : "nose",
+      "version" : "1.3.7"
+    },
+    {
+      "name" : "requests",
+      "version" : "2.12.3"
+    },
+    {
+      "name" : "pip",
+      "version" : "7.1.2"
+    },
+    {
+      "name" : "pip",
+      "version" : "9.0.1"
+    },
+    {
+      "name" : "virtualenv",
+      "version" : "15.0.1"
+    },
+    {
+      "name" : "setuptools",
+      "version" : "19.1.1"
+    },
+    {
+      "name" : "wheel",
+      "version" : "0.26.0"
+    },
+    {
+      "name" : "setuptools-git",
+      "version" : "1.1"
+    },
+    {
+      "name" : "flake8",
+      "version" : "2.5.4"
+    },
+    {
+      "name" : "Sphinx",
+      "version" : "1.4.1"
+    },
+    {
+      "name" : "pex",
+      "version" : "1.1.4"
+    },
+    {
+      "name" : "pytest",
+      "version" : "2.9.1"
+    },
+    {
+      "name" : "pytest-cov",
+      "version" : "15.0.1"
+    },
+    {
+      "name" : "pytest-xdist",
+      "version" : "1.14"
+    },
+    {
+      "name" : "pytest-html",
+      "version" : "1.12.0"
+    },
+    {
+      "name" : "setuptools",
+      "version" : "28.0.0"
+    }
+  ],
+  "replace" : [
+    {
+      "name": "alabaster",
+      "oldVersion": "0.7",
+      "newVersion": "0.7.1"
+    },
+    {
+      "name": "pytz",
+      "oldVersion": "0a",
+      "newVersion": "2016.4"
+    },
+    {
+      "name": "Babel",
+      "oldVersion": "0.8",
+      "newVersion": "1.0"
+    },
+    {
+      "name": "sphinx_rtd_theme",
+      "oldVersion": "0.1",
+      "newVersion": "0.1.1"
+    },
+    {
+      "name": "idna",
+      "oldVersion": "2.0.0",
+      "newVersion": "2.1"
+    },
+    {
+      "name": "chardet",
+      "oldVersion": "2.2",
+      "newVersion": "2.3"
+    },
+    {
+      "name": "setuptools",
+      "oldVersion": "0.6a2",
+      "newVersion": "32.1.0"
+    }
+  ]
+}
