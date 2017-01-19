@@ -24,7 +24,7 @@ dependencies {
 dcompose {
   pypi {
     baseDir = file('docker/')
-    repository = 'attx-dev:5000/pypirepo'
+    repository = 'attx-dev/pypirepo'
     portBindings = ['5039:5039', '5639:5639']
     volumes = ['/data']
     binds = ['/data:/data']
