@@ -3,29 +3,27 @@
 Aim is to simplify work with PyGradle https://github.com/linkedin/pygradle by providing a self-hosted repository for dependencies.
 
 The Docker image provides:
-* Nginx container to serve repository files;
-* API to initialize repository with a given set of dependencies - TO DO;
-* API to add new dependencies;
-* API developed using http://sparkjava.com/
-
-The Gradle build provides tasks:
-* gradle wrapper for Gradle 3.3 provided
-* build your own artifact for the API;
-* build docker image based on [gradle-dcompose-plugin](https://github.com/chrisgahlert/gradle-dcompose-plugin).
+* NGINIX container to serve repository files;
+* API developed using http://sparkjava.com/ :
+    * endpoint to initialize repository with a given set of dependencies;
+    * endpoint to add new dependencies;
+    * endpoint to upload `requirements.txt` - TO DO.
 
 ## Build and Run
 
 Build with gradle:
-* build the ivy-pypi-repo - `./gradlew build`
-* build the docker image - `./gradlew gradle buildpypiImage` it will generate a imageName at build (use it to run the container)
+* gradle wrapper for Gradle 3.3 provided - use `./gradlew`;
+* build the ivy-pypi-repo - `./gradlew build` a.k.a. your own artifact for the API;
+* run the ivy-pypi-repo - `./gradlew run`
+* build the docker image - `./gradlew buildpypiImage` it will generate the `attx-dev:5000/pypirepo` at build (use it to run the container) -  based on [gradle-dcompose-plugin](https://github.com/chrisgahlert/gradle-dcompose-plugin) - see for more tasks.
 
 Other commands:
 * `./gradlew run` on the ivy-pypi-repo to run the server locally for adding dependencies
 * `./gradlew tasks --all` - see all tasks
 
 Running the docker image:
-* without persistance: `docker run -p 5039:5039 -p 5639:5639 -d imageName`
-* with persistance: `docker run -p 5039:5039 -p 5639:5639 -d -v /data:/data imageName`
+* without persistance: `docker run -p 5039:5039 -p 5639:5639 -d attx-dev:5000/pypirepo`
+* with persistance: `docker run -p 5039:5039 -p 5639:5639 -d -v /data:/data attx-dev:5000/pypirepo`
 
 ### PyGradle usage
 
@@ -48,31 +46,30 @@ repositories {
 ## Endpoints
 
 The following endpoints are available:
-* `http://localhost:5039/pypi` - for retrieving depenencies
-* `http://localhost:5639/add`- for adding depenencies
+* `http://localhost:5039/pypi` - for retrieving depenencies;
+* `http://localhost:5639/init`- for initialising the repository with depenencies;
+* `http://localhost:5639/add`- for adding depenencies.
 
-Structure of the POST body for `http://localhost:5639/add`:
+The init dependencies can be manged in `resources/init.json` file.
+
+Adding new repository can be achieved by `http://localhost:5639/add` endpoint. JSON Request example:
 ```{json}
 {
 	"dependencies":  [
 		{
 			"name" : "dependency",
 			"version" : "1.0.0"
-		},
-		{}
+		}
 	],
 	"replace" : [
 		{
 			"name": "dependency",
 			"oldVersion": "0.1",
 			"newVersion": "0.1.1"
-		},
-		{}
+		}
 	]
 }
 ```
-
-
 Example of curl requests:
 
 * `curl -X GET -H http://localhost:5039/pypi/{dependencyName}/{version}/dependencyName-version.tar.gz` to retrieve dependency with a specific version number

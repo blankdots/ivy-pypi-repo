@@ -1,10 +1,88 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+<head>
     <meta charset="utf-8">
-    <title>My test page</title>
-  </head>
-  <body>
-    <p>Test page</p>
-  </body>
-</html>
+    <title>Pypi Ivy Repository</title>
+</head>
+
+<body id="preview">
+    <h2><a id="PypiRepo_for_PyGradle__Python_Gradle_builds_0"></a>PypiRepo for PyGradle - Python Gradle builds</h2>
+    <p>Aim is to simplify work with PyGradle <a href="https://github.com/linkedin/pygradle">https://github.com/linkedin/pygradle</a> by providing a self-hosted repository for dependencies.</p>
+    <p>Github repository: <a href="https://github.com/blankdots/ivy-pypi-repo">https://github.com/blankdots/ivy-pypi-repo</a></p>
+    <p>The Docker image provides:</p>
+    <ul>
+        <li>NGINIX container to serve repository files;</li>
+        <li>API developed using <a href="http://sparkjava.com/">http://sparkjava.com/</a> :
+            <ul>
+                <li>endpoint to initialize repository with a given set of dependencies;</li>
+                <li>endpoint to add new dependencies;</li>
+                <li>endpoint to upload <code>requirements.txt</code> file - TO DO.</li>
+            </ul>
+        </li>
+    </ul>
+    <h2><a id="Build_and_Run_11"></a>Build and Run</h2>
+    <p>Build with gradle:</p>
+    <ul>
+        <li>gradle wrapper for Gradle 3.3 provided - use <code>./gradlew</code>;</li>
+        <li>build the ivy-pypi-repo - <code>./gradlew build</code> a.k.a. your own artifact for the API;</li>
+        <li>run the ivy-pypi-repo - <code>./gradlew run</code></li>
+        <li>build the docker image - <code>./gradlew buildpypiImage</code> it will generate the <code>attx-dev:5000/pypirepo</code> at build (use it to run the container) - based on <a href="https://github.com/chrisgahlert/gradle-dcompose-plugin">gradle-dcompose-plugin</a>            - see for more tasks.</li>
+    </ul>
+    <p>Other commands:</p>
+    <ul>
+        <li><code>./gradlew run</code> on the ivy-pypi-repo to run the server locally for adding dependencies</li>
+        <li><code>./gradlew tasks --all</code> - see all tasks</li>
+    </ul>
+    <p>Running the docker image:</p>
+    <ul>
+        <li>without persistance: <code>docker run -p 5039:5039 -p 5639:5639 -d attx-dev:5000/pypirepo</code></li>
+        <li>with persistance: <code>docker run -p 5039:5039 -p 5639:5639 -d -v /data:/data attx-dev:5000/pypirepo</code></li>
+    </ul>
+    <h3><a id="PyGradle_usage_27"></a>PyGradle usage</h3>
+    <p>In order to use this Ivy repository with PyGradle one can set it up in the <code>build.grale</code> as:</p>
+    <pre><code class="language-{groovy}">repositories {
+  // the webrepository
+  ivy{
+    name 'pypi-repo'
+      url &quot;http://pypirepo:5039/&quot;
+      layout 'pattern' , {
+          artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
+          ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'
+      }
+  }
+}
+</code></pre>
+    <h2><a id="Endpoints_45"></a>Endpoints</h2>
+    <p>The following endpoints are available:</p>
+    <ul>
+        <li><code>http://localhost:5039/pypi</code> - for retrieving depenencies;</li>
+        <li><code>http://localhost:5639/init</code>- for initialising the repository with depenencies;</li>
+        <li><code>http://localhost:5639/add</code>- for adding depenencies.</li>
+    </ul>
+    <p>The init dependencies can be manged in <code>resources/init.json</code> file.</p>
+    <p>Adding new repository can be achieved by <code>http://localhost:5639/add</code> endpoint. JSON Request example:</p>
+    <pre><code class="language-{json}">{
+  &quot;dependencies&quot;:  [
+      {
+          &quot;name&quot; : &quot;dependency&quot;,
+          &quot;version&quot; : &quot;1.0.0&quot;
+      }
+  ],
+  &quot;replace&quot; : [
+      {
+          &quot;name&quot;: &quot;dependency&quot;,
+          &quot;oldVersion&quot;: &quot;0.1&quot;,
+          &quot;newVersion&quot;: &quot;0.1.1&quot;
+      }
+  ]
+}
+</code></pre>
+    <p>Example of curl requests:</p>
+    <ul>
+        <li><code>curl -X GET -H http://localhost:5039/pypi/{dependencyName}/{version}/dependencyName-version.tar.gz</code> to retrieve dependency with a specific version number</li>
+    </ul>
+    <ul>
+        <li><code>curl -X POST -H &quot;Content-Type: application/json&quot; -H &quot;Cache-Control: no-cache&quot; -H &quot;Postman-Token: 434b0f96-728d-f97e-c016-ffcf61b3f54a&quot; -d '{ &quot;dependencies&quot;: [ { &quot;name&quot; : &quot;pytest&quot;, &quot;version&quot; : &quot;3.0.5&quot; }, { &quot;name&quot; : &quot;elizabeth&quot;, &quot;version&quot; : &quot;0.3.11&quot; } ], &quot;replace&quot; : [ { &quot;name&quot;: &quot;alabaster&quot;, &quot;oldVersion&quot;: &quot;0.7&quot;, &quot;newVersion&quot;: &quot;0.7.1&quot; } ] }' &quot;http://localhost:5639/add&quot;</code>            - for adding dependencies</li>
+    </ul>

@@ -13,16 +13,16 @@ RUN apk add --update \
 
 VOLUME ["/data"]
 
-ENV version="0.3.38" plugin="0.1"
+ENV version="0.3.39" plugin="0.1.1"
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN wget -P /var/lib  https://dl.bintray.com/linkedin/maven/com/linkedin/pygradle/pivy-importer/${version}/pivy-importer-${version}-all.jar
 
-RUN wget -P /var http://github.com/blankdots/ivy-pypi-repo/releases/download/v${plugin}/ivy_pipy-${plugin}.tar \
-    && tar -xf /var/ivy_pipy-${plugin}.tar -C /var
+RUN wget -P /var http://github.com/blankdots/ivy-pypi-repo/releases/download/v${plugin}/ivy-pypi-repo-${plugin}.tar \
+    && tar -xf /var/ivy-pypi-repo-${plugin}.tar -C /var
 
-COPY web /data/web
+COPY web /var/web
 
 CMD nginx & \
-    ./var/ivy_pipy-${plugin}/bin/ivy_pipy
+    ./var/ivy-pypi-repo-${plugin}/bin/ivy-pypi-repo
