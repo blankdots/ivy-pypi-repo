@@ -13,7 +13,7 @@ RUN apk add --update \
 
 VOLUME ["/data"]
 
-ENV version="0.3.39" plugin="0.1.1"
+ENV version="0.4.1" plugin="0.1.1"
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
