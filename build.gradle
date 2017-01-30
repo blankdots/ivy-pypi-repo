@@ -6,6 +6,7 @@ plugins {
     id "com.chrisgahlert.gradle-dcompose-plugin" version "0.8.2"
 }
 
+version = '0.1.1'
 mainClassName = 'org.uh.attx.de.pypi.App'
 
 repositories {

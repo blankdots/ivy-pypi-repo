@@ -33,9 +33,9 @@ public class App {
         return obj;
     }
 
-    private static String buildCommand(String VERSION, String REPO, JSONArray dependencies, JSONArray replace) {
+    private static String buildCommand(String REPO, JSONArray dependencies, JSONArray replace) {
 
-        String artifact = String.format("/var/lib/pivy-importer-%s-all.jar", VERSION);
+        String artifact = "/var/lib/pivy-importer-all.jar";
         String commandLine = "";
         String packageString = "";
         String replaceString = "";
@@ -71,7 +71,6 @@ public class App {
 
     public static void main(String[] args) {
         final String REPO = "/data";
-        final String VERSION = "0.3.39";
 
         int maxThreads = 4;
         int minThreads = 2;
@@ -97,7 +96,7 @@ public class App {
             JSONArray dependencies = (JSONArray) jsonObject.get("dependencies");
             JSONArray replace = (JSONArray) jsonObject.get("replace");
 
-            String theStrings = buildCommand(VERSION, REPO, dependencies, replace);
+            String theStrings = buildCommand(REPO, dependencies, replace);
 
             try {
 
@@ -128,7 +127,7 @@ public class App {
 
             JSONArray dependencies = (JSONArray) jsonObject.get("dependencies");
             JSONArray replace = (JSONArray) jsonObject.get("replace");
-            String theStrings = buildCommand(VERSION, REPO, dependencies, replace);
+            String theStrings = buildCommand(REPO, dependencies, replace);
             try {
                 Runtime rt = Runtime.getRuntime();
                 Process pr = rt.exec(theStrings);
