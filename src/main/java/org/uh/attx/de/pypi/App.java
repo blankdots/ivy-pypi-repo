@@ -15,12 +15,13 @@ import java.util.logging.Logger;
 
 public class App {
 
-    private static Object readFile() {
+    private static Object readInit() {
 
         String fileName = "init.json";
         Object obj = new Object();
 
         JSONParser parser = new JSONParser();
+
         try {
             InputStream in = App.class.getClassLoader().getResourceAsStream(fileName);
             obj = parser.parse(new InputStreamReader(in, "UTF-8"));
@@ -32,8 +33,9 @@ public class App {
         return obj;
     }
 
-    private static String readDependencies(String VERSION, String REPO, JSONArray dependencies, JSONArray replace) {
+    private static String buildCommand(String REPO, JSONArray dependencies, JSONArray replace) {
 
+        String artifact = "/var/lib/pivy-importer-all.jar";
         String commandLine = "";
         String packageString = "";
         String replaceString = "";
@@ -47,7 +49,7 @@ public class App {
                 packageString += name + ":" + version + " ";
             }
 
-            commandLine = String.format("java -jar /var/lib/pivy-importer-%s-all.jar --repo %s %s", VERSION, REPO, packageString);
+            commandLine = String.format("java -jar %s --repo %s %s", artifact, REPO, packageString);
 
             if (replace != null) {
                 Iterator j = replace.iterator();
@@ -60,7 +62,7 @@ public class App {
                     replaceString += name + ":" + oldVersion + "=" + name + ":" + newVersion + " ";
                 }
 
-                commandLine = String.format("java -jar /var/lib/pivy-importer-%s-all.jar --repo %s %s--replace %s", VERSION, REPO, packageString, replaceString);
+                commandLine = String.format("java -jar %s --repo %s %s--replace %s", artifact, REPO, packageString, replaceString);
 
             }
         }
@@ -69,7 +71,6 @@ public class App {
 
     public static void main(String[] args) {
         final String REPO = "/data";
-        final String VERSION = "0.3.39";
 
         int maxThreads = 4;
         int minThreads = 2;
@@ -78,15 +79,24 @@ public class App {
         port(5639);
         threadPool(maxThreads, minThreads, timeOutMillis);
 
+        post("/requirements", "text/plain", (request, response) -> {
+            // upload requirements.txt file
+
+            String result = "";
+            response.status(201); // 201 Created
+            response.type("application/json");
+            return result;
+        });
+
         post("/init", (request, response) -> {
             //init the repository
 
-            JSONObject jsonObject = (JSONObject) readFile();
+            JSONObject jsonObject = (JSONObject) readInit();
 
             JSONArray dependencies = (JSONArray) jsonObject.get("dependencies");
             JSONArray replace = (JSONArray) jsonObject.get("replace");
 
-            String theStrings = readDependencies(VERSION, REPO, dependencies, replace);
+            String theStrings = buildCommand(REPO, dependencies, replace);
 
             try {
 
@@ -98,7 +108,7 @@ public class App {
                 TestCase.fail(ex.getMessage());
             }
 
-            response.status(201); // 201 Created
+            response.status(200); // 200 Created
             response.type("application/json");
             String result = String.format("{ " +
                     "\t\"executed\": \"%s\" \n" +
@@ -108,6 +118,7 @@ public class App {
 
 
         post("/add", "application/json", (request, response) -> {
+            // add the dependencies to the repository
             String content = request.body();
 
             JSONParser parser = new JSONParser();
@@ -116,7 +127,7 @@ public class App {
 
             JSONArray dependencies = (JSONArray) jsonObject.get("dependencies");
             JSONArray replace = (JSONArray) jsonObject.get("replace");
-            String theStrings = readDependencies(VERSION, REPO, dependencies, replace);
+            String theStrings = buildCommand(REPO, dependencies, replace);
             try {
                 Runtime rt = Runtime.getRuntime();
                 Process pr = rt.exec(theStrings);

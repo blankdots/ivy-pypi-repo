@@ -15,15 +15,15 @@ Build with gradle:
 * gradle wrapper for Gradle 3.3 provided - use `./gradlew`;
 * build the ivy-pypi-repo - `./gradlew build` a.k.a. your own artifact for the API;
 * run the ivy-pypi-repo - `./gradlew run`
-* build the docker image - `./gradlew buildpypiImage` it will generate the `attx-dev:5000/pypirepo` at build (use it to run the container) -  based on [gradle-dcompose-plugin](https://github.com/chrisgahlert/gradle-dcompose-plugin) - see for more tasks.
+* build the docker image - `./gradlew buildpypiImage` it will generate the `attx-dev/pypirepo` at build (use it to run the container) -  based on [gradle-dcompose-plugin](https://github.com/chrisgahlert/gradle-dcompose-plugin) - see for more tasks.
 
 Other commands:
 * `./gradlew run` on the ivy-pypi-repo to run the server locally for adding dependencies
 * `./gradlew tasks --all` - see all tasks
 
 Running the docker image:
-* without persistance: `docker run -p 5039:5039 -p 5639:5639 -d attx-dev:5000/pypirepo`
-* with persistance: `docker run -p 5039:5039 -p 5639:5639 -d -v /data:/data attx-dev:5000/pypirepo`
+* without persistance: `docker run -p 5039:5039 -p 5639:5639 -d attx-dev/pypirepo`
+* with persistance: `docker run -p 5039:5039 -p 5639:5639 -d -v /data:/data attx-dev/pypirepo`
 
 ### PyGradle usage
 
