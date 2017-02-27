@@ -13,7 +13,7 @@ RUN apk add --update \
 
 VOLUME ["/data"]
 
-ENV IVY=0.4.1
+ENV IVY=0.4.5
 ENV PLUGIN=0.1.1
 
 COPY nginx.conf /etc/nginx/nginx.conf
