@@ -111,7 +111,11 @@
     {
       "name" : "setuptools",
       "version" : "28.0.0"
-    }
+    },
+    {
+      "name" : "falcon",
+      "version" : "1..0"
+    },
   ],
   "replace" : [
     {

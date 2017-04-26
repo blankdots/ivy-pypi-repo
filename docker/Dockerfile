@@ -2,19 +2,17 @@ FROM nginx:alpine
 
 MAINTAINER Stefan Negru <stefan.negru@helsinki.fi>
 
-EXPOSE 5039
-EXPOSE 5639
-
 RUN apk add --update \
-    && apk --no-cache add openjdk8-jre \
-    && apk --no-cache add bash \
-    && apk --no-cache add wget \
-    && apk --no-cache add supervisor \
+    && apk add --no-cache openjdk8-jre \
+    && apk add --no-cache bash \
+    && apk add --no-cache wget \
+    && apk add --no-cache supervisor \
     && rm -rf /var/cache/apk/*
 
-ENV IVY=0.4.8
-ENV PLUGIN=0.2.0
+ARG IVY=0.4.9
+ARG PLUGIN=0.2.5
 ENV GOSU_VERSION 1.10
+
 RUN set -x \
     && apk add --no-cache --virtual .gosu-deps \
         dpkg \
@@ -31,16 +29,20 @@ RUN set -x \
     && gosu nobody true \
     && apk del .gosu-deps
 
-RUN wget -P /var/lib  https://dl.bintray.com/linkedin/maven/com/linkedin/pygradle/pivy-importer/${IVY}/pivy-importer-${IVY}-all.jar \
-    && mv /var/lib/pivy-importer-${IVY}-all.jar /var/lib/pivy-importer-all.jar
+RUN wget https://dl.bintray.com/linkedin/maven/com/linkedin/pygradle/pivy-importer/${IVY}/pivy-importer-${IVY}-all.jar --no-check-certificate \
+    && mv pivy-importer-${IVY}-all.jar /var/lib/pivy-importer-all.jar
 
 RUN wget -P /var http://github.com/blankdots/ivy-pypi-repo/releases/download/v${PLUGIN}/ivy-pypi-repo-${PLUGIN}.tar \
     && tar -xf /var/ivy-pypi-repo-${PLUGIN}.tar -C /var \
     && mv /var/ivy-pypi-repo-${PLUGIN} /var/ivy-pypi-repo
 
+# Adding user without root privileges alongside a user group
 RUN addgroup -S nonroot \
     && adduser -S -g nonroot nonroot
 
+# COPY nginx, supervisord specific configurations
+# default.conf is needed to have access to port 8080 as port 80 is not allowed with
+# to be used by a user with lower privileges
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
 COPY supervisor.conf /etc/supervisor/supervisord.conf
@@ -51,9 +53,16 @@ RUN touch /var/run/nginx.pid \
     && mkdir -p /data \
     && chmod +x /entrypoint.sh
 
+# The volume needs to be set after the directory has been created to avoid
+# permissions issues
 VOLUME ["/data"]
 
+# setting environment variables for entrypoint script
+# setting also directories to be owned by the nonroot user
 ENV GOSU_USER nonroot:nonroot
 ENV GOSU_CHOWN /var /data /etc/supervisor /var/run/nginx.pid /etc/nginx/ /var/run/nginx.pid
+
+EXPOSE 5039
+EXPOSE 5639
 
 ENTRYPOINT ["/entrypoint.sh"]

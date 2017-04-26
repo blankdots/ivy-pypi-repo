@@ -33,11 +33,12 @@ public class App {
         return obj;
     }
 
-    private static String buildCommand(String REPO, JSONArray dependencies, JSONArray replace) {
+    private static String buildCommand(String REPO, JSONArray dependencies, JSONArray replace, JSONArray forceDependencies) {
 
         String artifact = "/var/lib/pivy-importer-all.jar";
         String commandLine = "";
         String packageString = "";
+        String forcePackageString = "";
         String replaceString = "";
 
         if (dependencies != null) {
@@ -49,9 +50,22 @@ public class App {
                 packageString += name + ":" + version + " ";
             }
 
-            commandLine = String.format("java -jar %s --repo %s %s", artifact, REPO, packageString);
+            if (forceDependencies != null) {
+                Iterator m = forceDependencies.iterator();
+                while (m.hasNext()) {
+                    JSONObject forceDependency = (JSONObject) m.next();
+                    String forceName = (String) forceDependency.get("name");
+                    String forceVersion = (String) forceDependency.get("version");
+                    forcePackageString += forceName + ":" + forceVersion + " ";
+                }
 
-            if (replace != null) {
+                commandLine = String.format("java -jar %s --repo %s %s --force %s", artifact, REPO, packageString, forcePackageString);
+            } else {
+
+                commandLine = String.format("java -jar %s --repo %s %s", artifact, REPO, packageString);
+            }
+
+            if (replace != null && forceDependencies == null) {
                 Iterator j = replace.iterator();
 
                 while (j.hasNext()) {
@@ -62,8 +76,11 @@ public class App {
                     replaceString += name + ":" + oldVersion + "=" + name + ":" + newVersion + " ";
                 }
 
-                commandLine = String.format("java -jar %s --repo %s %s--replace %s", artifact, REPO, packageString, replaceString);
+                commandLine = String.format("java -jar %s --repo %s %s --replace %s", artifact, REPO, packageString, replaceString);
 
+            } else if (replace != null && forceDependencies != null) {
+                commandLine = String.format("java -jar %s --repo %s %s --force %s --replace %s", artifact, REPO, packageString, forcePackageString,
+                        replaceString);
             }
         }
         return commandLine;
@@ -95,8 +112,9 @@ public class App {
 
             JSONArray dependencies = (JSONArray) jsonObject.get("dependencies");
             JSONArray replace = (JSONArray) jsonObject.get("replace");
+            JSONArray force = (JSONArray) jsonObject.get("force");
 
-            String theStrings = buildCommand(REPO, dependencies, replace);
+            String theStrings = buildCommand(REPO, dependencies, replace, force);
 
             try {
 
@@ -127,7 +145,10 @@ public class App {
 
             JSONArray dependencies = (JSONArray) jsonObject.get("dependencies");
             JSONArray replace = (JSONArray) jsonObject.get("replace");
-            String theStrings = buildCommand(REPO, dependencies, replace);
+            JSONArray force = (JSONArray) jsonObject.get("force");
+
+            String theStrings = buildCommand(REPO, dependencies, replace, force);
+            
             try {
                 Runtime rt = Runtime.getRuntime();
                 Process pr = rt.exec(theStrings);
@@ -138,8 +159,9 @@ public class App {
             String result = String.format("{ \n" +
                     "\t\"addedDependencies\": %s, \n" +
                     "\t\"addedReplace\": %s, \n" +
+                    "\t\"addedForce\": %s, \n" +
                     "\t\"executed\": \"%s\" \n" +
-                    "}", dependencies, replace, theStrings);
+                    "}", dependencies, replace, force, theStrings);
             response.status(201); // 201 Created
             response.type("application/json");
             return result;
