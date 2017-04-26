@@ -3,7 +3,7 @@
 Aim is to simplify work with PyGradle https://github.com/linkedin/pygradle by providing a self-hosted repository for dependencies.
 
 The Docker image provides:
-* NGINIX container to serve repository files;
+* NGINX container to serve repository files;
 * API developed using http://sparkjava.com/ :
     * endpoint to initialize repository with a given set of dependencies;
     * endpoint to add new dependencies;
@@ -15,19 +15,19 @@ Build with gradle:
 * gradle wrapper for Gradle 3.3 provided - use `./gradlew`;
 * build the ivy-pypi-repo - `./gradlew build` a.k.a. your own artifact for the API;
 * run the ivy-pypi-repo - `./gradlew run`
-* build the docker image - `./gradlew buildpypiImage` it will generate the `attx-dev/pypirepo` at build (use it to run the container) -  based on [gradle-dcompose-plugin](https://github.com/chrisgahlert/gradle-dcompose-plugin) - see for more tasks.
+* build the docker image - `./gradlew buildPypiImage` it will generate the `attx-dev/pypirepo` at build (use it to run the container) -  based on [gradle-dcompose-plugin](https://github.com/chrisgahlert/gradle-dcompose-plugin) - see for more tasks.
 
 Other commands:
 * `./gradlew run` on the ivy-pypi-repo to run the server locally for adding dependencies
 * `./gradlew tasks --all` - see all tasks
 
 Running the docker image:
-* without persistance: `docker run -p 5039:5039 -p 5639:5639 -d attx-dev/pypirepo`
-* with persistance: `docker run -p 5039:5039 -p 5639:5639 -d -v /data:/data attx-dev/pypirepo`
+* without persistence: `docker run -p 5039:5039 -p 5639:5639 -d attx-dev/pypirepo`
+* with persistence: `docker run -p 5039:5039 -p 5639:5639 -d -v /data:/data/pivy attx-dev/pypirepo`
 
 ### PyGradle usage
 
-In order to use this Ivy repository with PyGradle one can set it up in the `build.grale` as:
+In order to use this Ivy repository with PyGradle one can set it up in the `build.gradle` as:
 
 ``` {groovy}
 repositories {
@@ -46,9 +46,9 @@ repositories {
 ## Endpoints
 
 The following endpoints are available:
-* `http://localhost:5039/pypi` - for retrieving depenencies;
-* `http://localhost:5639/init`- for initialising the repository with depenencies;
-* `http://localhost:5639/add`- for adding depenencies.
+* `http://localhost:5039/pypi` - for retrieving dependencies;
+* `http://localhost:5639/init`- for initialising the repository with dependencies;
+* `http://localhost:5639/add`- for adding dependencies.
 
 The init dependencies can be manged in `resources/init.json` file.
 

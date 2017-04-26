@@ -50,18 +50,19 @@ public class App {
                 packageString += name + ":" + version + " ";
             }
 
-            commandLine = String.format("java -jar %s --repo %s %s", artifact, REPO, packageString);
-
             if (forceDependencies != null) {
-                Iterator m = dependencies.iterator();
+                Iterator m = forceDependencies.iterator();
                 while (m.hasNext()) {
-                    JSONObject dependency = (JSONObject) m.next();
-                    String forceName = (String) dependency.get("name");
-                    String forceVersion = (String) dependency.get("version");
+                    JSONObject forceDependency = (JSONObject) m.next();
+                    String forceName = (String) forceDependency.get("name");
+                    String forceVersion = (String) forceDependency.get("version");
                     forcePackageString += forceName + ":" + forceVersion + " ";
                 }
 
                 commandLine = String.format("java -jar %s --repo %s %s --force %s", artifact, REPO, packageString, forcePackageString);
+            } else {
+
+                commandLine = String.format("java -jar %s --repo %s %s", artifact, REPO, packageString);
             }
 
             if (replace != null && forceDependencies == null) {
@@ -158,8 +159,9 @@ public class App {
             String result = String.format("{ \n" +
                     "\t\"addedDependencies\": %s, \n" +
                     "\t\"addedReplace\": %s, \n" +
+                    "\t\"addedForce\": %s, \n" +
                     "\t\"executed\": \"%s\" \n" +
-                    "}", dependencies, replace, theStrings);
+                    "}", dependencies, replace, force, theStrings);
             response.status(201); // 201 Created
             response.type("application/json");
             return result;
