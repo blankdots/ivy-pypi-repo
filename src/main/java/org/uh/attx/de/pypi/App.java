@@ -33,11 +33,12 @@ public class App {
         return obj;
     }
 
-    private static String buildCommand(String REPO, JSONArray dependencies, JSONArray replace) {
+    private static String buildCommand(String REPO, JSONArray dependencies, JSONArray replace, JSONArray forceDependencies) {
 
         String artifact = "/var/lib/pivy-importer-all.jar";
         String commandLine = "";
         String packageString = "";
+        String forcePackageString = "";
         String replaceString = "";
 
         if (dependencies != null) {
@@ -51,7 +52,19 @@ public class App {
 
             commandLine = String.format("java -jar %s --repo %s %s", artifact, REPO, packageString);
 
-            if (replace != null) {
+            if (forceDependencies != null) {
+                Iterator m = dependencies.iterator();
+                while (m.hasNext()) {
+                    JSONObject dependency = (JSONObject) m.next();
+                    String forceName = (String) dependency.get("name");
+                    String forceVersion = (String) dependency.get("version");
+                    forcePackageString += forceName + ":" + forceVersion + " ";
+                }
+
+                commandLine = String.format("java -jar %s --repo %s %s --force %s", artifact, REPO, packageString, forcePackageString);
+            }
+
+            if (replace != null && forceDependencies == null) {
                 Iterator j = replace.iterator();
 
                 while (j.hasNext()) {
@@ -62,8 +75,11 @@ public class App {
                     replaceString += name + ":" + oldVersion + "=" + name + ":" + newVersion + " ";
                 }
 
-                commandLine = String.format("java -jar %s --repo %s %s--replace %s", artifact, REPO, packageString, replaceString);
+                commandLine = String.format("java -jar %s --repo %s %s --replace %s", artifact, REPO, packageString, replaceString);
 
+            } else if (replace != null && forceDependencies != null) {
+                commandLine = String.format("java -jar %s --repo %s %s --force %s --replace %s", artifact, REPO, packageString, forcePackageString,
+                        replaceString);
             }
         }
         return commandLine;
@@ -95,8 +111,9 @@ public class App {
 
             JSONArray dependencies = (JSONArray) jsonObject.get("dependencies");
             JSONArray replace = (JSONArray) jsonObject.get("replace");
+            JSONArray force = (JSONArray) jsonObject.get("force");
 
-            String theStrings = buildCommand(REPO, dependencies, replace);
+            String theStrings = buildCommand(REPO, dependencies, replace, force);
 
             try {
 
@@ -127,7 +144,10 @@ public class App {
 
             JSONArray dependencies = (JSONArray) jsonObject.get("dependencies");
             JSONArray replace = (JSONArray) jsonObject.get("replace");
-            String theStrings = buildCommand(REPO, dependencies, replace);
+            JSONArray force = (JSONArray) jsonObject.get("force");
+
+            String theStrings = buildCommand(REPO, dependencies, replace, force);
+            
             try {
                 Runtime rt = Runtime.getRuntime();
                 Process pr = rt.exec(theStrings);
