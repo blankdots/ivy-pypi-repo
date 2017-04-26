@@ -37,9 +37,12 @@ public class App {
 
         String artifact = "/var/lib/pivy-importer-all.jar";
         String commandLine = "";
-        String packageString = "";
         String forcePackageString = "";
         String replaceString = "";
+
+        String dependencyOption = "";
+        String forceOption = "";
+        String replaceOption = "";
 
         if (dependencies != null) {
             Iterator i = dependencies.iterator();
@@ -47,46 +50,37 @@ public class App {
                 JSONObject dependency = (JSONObject) i.next();
                 String name = (String) dependency.get("name");
                 String version = (String) dependency.get("version");
-                packageString += name + ":" + version + " ";
-            }
-
-            if (forceDependencies != null) {
-                Iterator m = forceDependencies.iterator();
-                while (m.hasNext()) {
-                    JSONObject forceDependency = (JSONObject) m.next();
-                    String forceName = (String) forceDependency.get("name");
-                    String forceVersion = (String) forceDependency.get("version");
-                    forcePackageString += forceName + ":" + forceVersion + " ";
-                }
-                commandLine = String.format("java -jar %s --repo %s %s --force %s", artifact, REPO, packageString, forcePackageString);
-
-            } else if(dependencies == null && forceDependencies != null) {
-                commandLine = String.format("java -jar %s --repo %s --force %s", artifact, REPO, forcePackageString);
-            } else {
-                commandLine = String.format("java -jar %s --repo %s %s", artifact, REPO, packageString);
-            }
-
-            if (replace != null && forceDependencies == null) {
-                Iterator j = replace.iterator();
-
-                while (j.hasNext()) {
-                    JSONObject replacing = (JSONObject) j.next();
-                    String name = (String) replacing.get("name");
-                    String oldVersion = (String) replacing.get("oldVersion");
-                    String newVersion = (String) replacing.get("newVersion");
-                    replaceString += name + ":" + oldVersion + "=" + name + ":" + newVersion + " ";
-                }
-
-                commandLine = String.format("java -jar %s --repo %s %s --replace %s", artifact, REPO, packageString, replaceString);
-
-            } else if (replace != null && dependencies == null && forceDependencies !=null) {
-                commandLine = String.format("java -jar %s --repo %s --force %s --replace %s", artifact, REPO, forcePackageString,
-                        replaceString);
-            } else if (replace != null && forceDependencies != null && dependencies != null)  {
-                commandLine = String.format("java -jar %s --repo %s %s --force %s --replace %s", artifact, REPO, packageString, forcePackageString,
-                        replaceString);
+                dependencyOption += name + ":" + version + " ";
             }
         }
+
+        if (replace != null) {
+            Iterator j = replace.iterator();
+            while (j.hasNext()) {
+                JSONObject replacing = (JSONObject) j.next();
+                String name = (String) replacing.get("name");
+                String oldVersion = (String) replacing.get("oldVersion");
+                String newVersion = (String) replacing.get("newVersion");
+                replaceString += name + ":" + oldVersion + "=" + name + ":" + newVersion + " ";
+            }
+
+            replaceOption = String.format("--replace %s", replaceString);
+        }
+
+        if (forceDependencies != null) {
+            Iterator m = forceDependencies.iterator();
+            while (m.hasNext()) {
+                JSONObject forceDependency = (JSONObject) m.next();
+                String forceName = (String) forceDependency.get("name");
+                String forceVersion = (String) forceDependency.get("version");
+                forcePackageString += forceName + ":" + forceVersion + " ";
+            }
+
+            forceOption = String.format("--force %s", forcePackageString);
+        }
+
+        commandLine = String.format("java -jar %s --repo %s %s %s %s ", artifact, REPO, dependencyOption, forceOption, replaceOption);
+
         return commandLine;
     }
 
