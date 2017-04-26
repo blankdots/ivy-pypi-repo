@@ -58,10 +58,11 @@ public class App {
                     String forceVersion = (String) forceDependency.get("version");
                     forcePackageString += forceName + ":" + forceVersion + " ";
                 }
-
                 commandLine = String.format("java -jar %s --repo %s %s --force %s", artifact, REPO, packageString, forcePackageString);
-            } else {
 
+            } else if(dependencies == null && forceDependencies != null) {
+                commandLine = String.format("java -jar %s --repo %s --force %s", artifact, REPO, forcePackageString);
+            } else {
                 commandLine = String.format("java -jar %s --repo %s %s", artifact, REPO, packageString);
             }
 
@@ -78,7 +79,10 @@ public class App {
 
                 commandLine = String.format("java -jar %s --repo %s %s --replace %s", artifact, REPO, packageString, replaceString);
 
-            } else if (replace != null && forceDependencies != null) {
+            } else if (replace != null && dependencies == null && forceDependencies !=null) {
+                commandLine = String.format("java -jar %s --repo %s --force %s --replace %s", artifact, REPO, forcePackageString,
+                        replaceString);
+            } else if (replace != null && forceDependencies != null && dependencies != null)  {
                 commandLine = String.format("java -jar %s --repo %s %s --force %s --replace %s", artifact, REPO, packageString, forcePackageString,
                         replaceString);
             }
