@@ -32,7 +32,7 @@ RUN set -x \
 RUN wget https://dl.bintray.com/linkedin/maven/com/linkedin/pygradle/pivy-importer/${IVY}/pivy-importer-${IVY}-all.jar --no-check-certificate \
     && mv pivy-importer-${IVY}-all.jar /var/lib/pivy-importer-all.jar
 
-RUN wget -P /var http://github.com/blankdots/ivy-pypi-repo/releases/download/v${PLUGIN}/ivy-pypi-repo-${PLUGIN}.tar \
+RUN wget -P /var https://github.com/blankdots/ivy-pypi-repo/releases/download/v${PLUGIN}/ivy-pypi-repo-${PLUGIN}.tar \
     && tar -xf /var/ivy-pypi-repo-${PLUGIN}.tar -C /var \
     && mv /var/ivy-pypi-repo-${PLUGIN} /var/ivy-pypi-repo
 

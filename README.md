@@ -12,7 +12,7 @@ The Docker image provides:
 ## Build and Run
 
 Build with gradle:
-* gradle wrapper for Gradle 3.3 provided - use `./gradlew`;
+* gradle wrapper for Gradle 4.2 provided - use `./gradlew`;
 * build the ivy-pypi-repo - `./gradlew build` a.k.a. your own artifact for the API;
 * run the ivy-pypi-repo - `./gradlew run`
 * build the docker image - `./gradlew buildPypiImage` it will generate the `attx-dev/pypirepo` at build (use it to run the container) -  based on [gradle-dcompose-plugin](https://github.com/chrisgahlert/gradle-dcompose-plugin) - see for more tasks.
@@ -48,7 +48,7 @@ repositories {
 The following endpoints are available:
 * `http://localhost:5039/pypi` - for retrieving dependencies;
 * `http://localhost:5639/init`- for initialising the repository with dependencies;
-* `http://localhost:5639/add`- for adding dependencies.
+* `http://localhost:5639/add`- for adding dependencies (using HTTP POST method).
 
 The init dependencies can be manged in `resources/init.json` file.
 
