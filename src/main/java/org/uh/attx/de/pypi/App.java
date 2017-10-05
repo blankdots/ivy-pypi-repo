@@ -87,8 +87,8 @@ public class App {
     public static void main(String[] args) {
         final String REPO = "/data";
 
-        int maxThreads = 4;
-        int minThreads = 2;
+        int maxThreads = 6;
+        int minThreads = 5;
         int timeOutMillis = 30000;
 
         port(5639);
