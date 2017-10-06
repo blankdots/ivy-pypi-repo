@@ -50,7 +50,7 @@ The following endpoints are available:
 * `http://localhost:5639/init`- for initialising the repository with dependencies;
 * `http://localhost:5639/add`- for adding dependencies (using HTTP POST method).
 
-The init dependencies can be manged in `resources/init.json` file.
+The init dependencies can be managed in `resources/init.json` file.
 
 Adding new repository can be achieved by `http://localhost:5639/add` endpoint. JSON Request example:
 ```{json}
