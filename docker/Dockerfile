@@ -9,8 +9,8 @@ RUN apk add --update \
     && apk add --no-cache supervisor \
     && rm -rf /var/cache/apk/*
 
-ARG IVY=0.6.12
-ARG PLUGIN=0.2.6
+ARG IVY=0.7.0
+ARG PLUGIN=0.2.7
 ENV GOSU_VERSION 1.10
 
 RUN set -x \
