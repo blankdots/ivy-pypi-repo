@@ -23,7 +23,7 @@ Other commands:
 
 Running the docker image:
 * without persistence: `docker run -p 5039:5039 -p 5639:5639 -d blankdots/ivy-pypi-repo`
-* with persistence: `docker run -p 5039:5039 -p 5639:5639 -d -v /data:/data/pivy blankdots/ivy-pypi-repo`
+* with persistence: `docker run -p 5039:5039 -p 5639:5639 -d -v /data:/data blankdots/ivy-pypi-repo`
 
 ### PyGradle usage
 
