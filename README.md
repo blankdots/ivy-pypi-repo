@@ -71,7 +71,7 @@ Adding new repository can be achieved by `http://localhost:5639/add` endpoint. J
 }
 ```
 
-** NOTE that multile dependencies at the same time might not be possible to import due to the pivy-importer. **
+**NOTE that multile dependencies at the same time might not be possible to import due to the pivy-importer.**
 
 Example of curl requests:
 
