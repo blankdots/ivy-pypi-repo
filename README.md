@@ -12,7 +12,7 @@ The Docker image provides:
 ## Build and Run
 
 Build with gradle:
-* gradle wrapper for Gradle 4.2 provided - use `./gradlew`;
+* gradle wrapper for Gradle 4.9 provided - use `./gradlew`;
 * build the ivy-pypi-repo - `./gradlew build` a.k.a. your own artifact for the API;
 * run the ivy-pypi-repo - `./gradlew run`
 * build the docker image - `./gradlew buildPypiImage` it will generate the `attx-dev/pypirepo` at build (use it to run the container) -  based on [gradle-dcompose-plugin](https://github.com/chrisgahlert/gradle-dcompose-plugin) - see for more tasks.
